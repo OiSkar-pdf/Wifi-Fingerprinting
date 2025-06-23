@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class classifier(nn.Module):
-    def __init__(self, num_classes=4):
+    def __init__(self, num_classes):
         super(classifier, self).__init__()
         self.conv1 = nn.Conv1d(1, 50, 7, 1, 3)
         self.pool1 = nn.MaxPool1d(2, 2)
