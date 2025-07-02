@@ -1,0 +1,5 @@
+__pycache__/
+logs/
+KRI-16Devices-RawData/
+CNN_venv/
+embeddings_output

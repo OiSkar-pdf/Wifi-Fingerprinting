@@ -1,41 +1,29 @@
-import torch
-import torch.nn as nn
-from torchvision import datasets
-from torchvision.transforms import ToTensor
-import matplotlib.pyplot as plt
 import os
-import pandas as pd
-from torch.utils.data import Dataset, DataLoader
-from sigmf import SigMFFile, sigmffile
+import torch
+from torch.utils.data import Dataset
 import numpy as np
 
-def sliding_window(data, window_size, stride):
-    windows = []
-    for i in range(0, len(data) - window_size + 1, stride):
-        segment = data[i:i + window_size]
-        real = segment.real
-        imag = segment.imag
-        windows.append(np.stack([real, imag], axis=0))
-    return np.array(windows, dtype=np.float32)
-
-
 class CustomImageDataset(Dataset):
-    def __init__(self, iq_sequences, labels, dist_dir, window_size=128, stride=1):
-        self.iq_sequences = iq_sequences
-        self.labels = labels
-        self.dist_dir = dist_dir
+    def __init__(self, file_paths, labels, window_size=128, stride=16):
+        self.samples = []
         self.window_size = window_size
         self.stride = stride
-        self.samples = []
-        self.targets = []
+        for path, label in file_paths:
+            file_size = os.path.getsize(path) // 8  # complex64 = 8 bytes
+            n_windows = (file_size - window_size) // stride + 1
+            for i in range(n_windows):
+                start = i * stride
+                self.samples.append((path, start, label))
 
-        for seq, label in zip(self.iq_sequences, self.labels):
-            window = sliding_window(seq, self.window_size, self.stride)
-            self.samples.extend(window)
-            self.targets.extend([label] * len(window))
-    
     def __len__(self):
         return len(self.samples)
-    
+
     def __getitem__(self, idx):
-        return torch.tensor(self.samples[idx], dtype=torch.float32), torch.tensor(self.targets[idx], dtype=torch.long)
+        path, start, label = self.samples[idx]
+        iq = np.memmap(path, dtype=np.complex64, mode='r', offset=start * 8, shape=(self.window_size,))
+        power = np.mean(np.abs(iq) ** 2)
+        if power > 0:
+            iq = iq / np.sqrt(power)
+        x = np.stack([iq.real, iq.imag], axis=0).astype(np.float32)  # [2, window_size]
+        x = np.expand_dims(x, axis=0)  # [1, 2, window_size] if needed by your model
+        return torch.from_numpy(x), torch.tensor(label, dtype=torch.long)
