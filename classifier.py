@@ -19,7 +19,6 @@ class classifier(nn.Module):
 
     def forward(self, x):
 
-        x = x.unsqueeze(1)
         x = F.relu(self.conv1(x))
         x = self.pool1(x)
         x = F.relu(self.conv2(x))

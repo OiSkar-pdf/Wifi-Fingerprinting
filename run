@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=wifi-train
-#SBATCH --output=logs/embeddings_output_%j.out  
-#SBATCH --error=logs/embeddings_error_%j.err
+#SBATCH --output=logs/embeddings_output.out  
+#SBATCH --error=logs/embeddings_error.err
 #SBATCH --mem=120G                             
 
 

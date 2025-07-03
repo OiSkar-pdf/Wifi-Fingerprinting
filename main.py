@@ -47,9 +47,9 @@ def load_from_folder(folder_dir):
     return file_label_pairs, label_map
 
 def train_model():
-    batch_size = 8
+    batch_size = 32
     window_size = 128
-    stride = 16
+    stride = 64
     epochs = 4
     learning_rate = 0.001
     num_classes = 16
@@ -72,13 +72,13 @@ def train_model():
 
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
+    print(f"Using device: {device}", flush = True)
 
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
     fold = 0
 
     for train_index, val_index in kf.split(all_file_label_pairs):
-        print(f"\n===== Fold {fold + 1} / 5 =====")
+        print(f"\n===== Fold {fold + 1} / 5 =====", flush = True)
 
         train_pairs = all_file_label_pairs[train_index]
         val_pairs = all_file_label_pairs[val_index]
