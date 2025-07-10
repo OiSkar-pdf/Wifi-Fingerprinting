@@ -5,13 +5,13 @@ import torch.nn.functional as F
 class classifier(nn.Module):
     def __init__(self, num_classes):
         super(classifier, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=50, kernel_size=(1, 7), padding=(0, 3))
-        self.pool1 = nn.MaxPool2d((1, 2))
-        self.conv2 = nn.Conv2d(in_channels=50, out_channels=50, kernel_size=(2, 7), padding=(0, 3))
-        self.pool2 = nn.MaxPool2d((1, 2))
+        self.conv1 = nn.Conv1d(in_channels=2, out_channels=50, kernel_size=7, padding=3)
+        self.pool1 = nn.MaxPool1d(2)
+        self.conv2 = nn.Conv1d(in_channels=50, out_channels=50, kernel_size=7, padding=3)
+        self.pool2 = nn.MaxPool1d(2)
 
 
-        self.fc1 = nn.Linear(50 * 1* 32, 256)
+        self.fc1 = nn.Linear(50 * 32, 256)
         self.dropout1 = nn.Dropout(0.5)
         self.fc2 = nn.Linear(256, 80)
         self.dropout2 = nn.Dropout(0.5)

@@ -1,137 +1,155 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-from sklearn.model_selection import KFold
+from sklearn.metrics import classification_report
 import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 from data_test import CustomImageDataset
 from classifier import classifier
+from torch.utils.data import Subset
+from collections import defaultdict
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
+batch_dir = "/common/users/oi66/Wifi-Fingerprinting/KRI_16Devices_RawData"
+labels = []
+ 
+for folder in os.listdir(batch_dir):
+    labels.append(folder)
 
-def load_iq_data(data_path, meta_path, dtype=np.complex128):
-    try:
-        meta = pd.read_json(meta_path)
-        iq = np.fromfile(data_path, dtype=dtype)
-        return iq
-    except Exception as e:
-        print(f"Error loading {data_path}: {e}")
-        return None
+label_map = {label: idx for idx, label in enumerate(labels)}
+#train 4 devices at a time
+epochs = 20
+batch_size = 1024
+window_size = 128
+stride = 64
+optimizer = torch.optim.Adam
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
-def load_from_folder(folder_dir):
-    file_label_pairs = []
-    label_map = {}
-    label_counter = 0
-
-    for filename in os.listdir(folder_dir):
-        if filename.endswith(".sigmf-data"):
-            data_path = os.path.join(folder_dir, filename)
-            meta_path = os.path.join(folder_dir, filename.replace(".sigmf-data", ".sigmf-meta"))
-            if not os.path.exists(meta_path):
-                continue
-
-            base = filename.replace(".sigmf-data", "")
-            parts = base.split('_')
-            label = parts[2] + "_" + parts[3] if len(parts) >= 4 else base
-
-            if label not in label_map:
-                label_map[label] = label_counter
-                label_counter += 1
-
-            file_label_pairs.append((data_path, label_map[label]))
-
-    return file_label_pairs, label_map
-
-def train_model():
-    batch_size = 32
-    window_size = 128
-    stride = 64
-    epochs = 4
-    learning_rate = 0.001
-    num_classes = 16
-
-    batch_dir = "/common/users/oi66/Wifi-Fingerprinting/KRI-16Devices-RawData"
-    if not os.path.exists(batch_dir):
-        print(f"Error: Directory '{batch_dir}' not found")
-        return
-
-    all_file_label_pairs = []
-
-    for folder_name in os.listdir(batch_dir):
-        folder = os.path.join(batch_dir, folder_name)
-        if not os.path.isdir(folder):
-            continue
-        file_label_pairs, _ = load_from_folder(folder)
-        all_file_label_pairs.extend(file_label_pairs)
-
-    all_file_label_pairs = np.array(all_file_label_pairs, dtype=object)
+data = []
+train_labels = labels[:4]
+#create a dataset with the first 4 devices
+for label in train_labels:
+    folder_path = os.path.join(batch_dir, label)
+    for file_name in os.listdir(folder_path):
+        if file_name.endswith('.sigmf-data'):
+            label_idx = label_map[label]
+                # Assuming the run is part of the filename
+            file_path = os.path.join(folder_path, file_name)
+            data.append((file_path, label_idx))
 
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}", flush = True)
+# Create the full windowed dataset for your selected devices
+full_dataset = CustomImageDataset(data, window_size=window_size, stride=stride)
 
-    kf = KFold(n_splits=5, shuffle=True, random_state=42)
-    fold = 0
+# Group indices by device label
+label_to_indices = defaultdict(list)
+for idx, (_, _, label) in enumerate(full_dataset.samples):
+    label_to_indices[label].append(idx)
 
-    for train_index, val_index in kf.split(all_file_label_pairs):
-        print(f"\n===== Fold {fold + 1} / 5 =====", flush = True)
 
-        train_pairs = all_file_label_pairs[train_index]
-        val_pairs = all_file_label_pairs[val_index]
+random.seed(42)
 
-        train_dataset = CustomImageDataset(train_pairs, None, window_size=window_size, stride=stride)
-        val_dataset = CustomImageDataset(val_pairs, None, window_size=window_size, stride=stride)
+train_size = 200_000
+val_size = 10_000
+test_size = 50_000
 
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-        val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+train_indices = []
+val_indices = []
+test_indices = []
 
-        model = classifier(num_classes=num_classes).to(device)
-        optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-        criterion = nn.CrossEntropyLoss()
+for label, indices in label_to_indices.items():
+    indices = indices.copy()
+    random.shuffle(indices)
 
-        for epoch in range(epochs):
-            model.train()
-            epoch_loss = 0
-            correct = 0
-            total = 0
+    train_split = indices[:train_size]
+    val_split = indices[train_size:train_size + val_size]
+    test_split = indices[train_size + val_size:train_size + val_size + test_size]
 
-            for X_batch, Y_batch in train_loader:
-                X_batch, Y_batch = X_batch.to(device), Y_batch.to(device)
-                optimizer.zero_grad()
-                outputs = model(X_batch)
-                loss = criterion(outputs, Y_batch)
-                loss.backward()
-                optimizer.step()
+    train_indices.extend(train_split)
+    val_indices.extend(val_split)
+    test_indices.extend(test_split)
 
-                epoch_loss += loss.item()
-                preds = torch.argmax(outputs, dim=1)
-                correct += (preds == Y_batch).sum().item()
-                total += Y_batch.size(0)
+train_dataset = Subset(full_dataset, train_indices)  # Print the first 50 samples to check the data
+val_dataset = Subset(full_dataset, val_indices)
+test_dataset = Subset(full_dataset, test_indices)
 
-            avg_loss = epoch_loss / len(train_loader)
-            train_acc = 100 * correct / total
-            print(f"  Epoch {epoch+1}, Loss: {avg_loss:.4f}, Train Acc: {train_acc:.2f}%")
 
-        model.eval()
-        correct = 0
-        total = 0
-        with torch.no_grad():
-            for X_batch, Y_batch in val_loader:
-                X_batch, Y_batch = X_batch.to(device), Y_batch.to(device)
-                outputs = model(X_batch)
-                preds = torch.argmax(outputs, dim=1)
-                correct += (preds == Y_batch).sum().item()
-                total += Y_batch.size(0)
+dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
 
-        val_acc = 100 * correct / total
-        print(f"Fold {fold+1} Validation Accuracy: {val_acc:.2f}%")
+model = classifier(num_classes=len(train_labels))
+model.to(device)
+optimizer = optimizer(model.parameters(), lr=0.0001)
+criterion = nn.CrossEntropyLoss()
 
-        torch.save(model.state_dict(), f"model_fold_{fold+1}.pt")
-        fold += 1
+# Create dataloaders
+train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
 
-if __name__ == '__main__':
-    train_model()
+# Initialize model, optimizer, loss
+model = classifier(num_classes=len(train_labels))
+model.to(device)
+
+for epoch in range(epochs):
+    print(f"Epoch {epoch+1}/{epochs}")
+
+    # --- Training ---
+    model.train()
+    running_loss = 0.0
+    for inputs, labels in train_dataloader:
+        inputs, labels = inputs.to(device), labels.to(device)
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+    avg_train_loss = running_loss / len(train_dataloader)
+    print(f"Training Loss: {avg_train_loss:.4f}")
+
+    # --- Validation ---
+    model.eval()
+    val_loss = 0.0
+    all_val_preds = []
+    all_val_labels = []
+    with torch.no_grad():
+        for inputs, labels in val_dataloader:
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            val_loss += loss.item()
+
+            _, preds = torch.max(outputs, 1)
+            all_val_preds.extend(preds.cpu().numpy())
+            all_val_labels.extend(labels.cpu().numpy())
+
+    avg_val_loss = val_loss / len(val_dataloader)
+    print(f"Validation Loss: {avg_val_loss:.4f}")
+
+    # Optional: classification report per epoch
+    print("Validation classification report:")
+    print(classification_report(all_val_labels, all_val_preds, target_names=train_labels))
+
+# --- Testing after training is complete ---
+model.eval()
+all_test_preds = []
+all_test_labels = []
+with torch.no_grad():
+    for inputs, labels in test_dataloader:
+        inputs, labels = inputs.to(device), labels.to(device)
+        outputs = model(inputs)
+        _, preds = torch.max(outputs, 1)
+        all_test_preds.extend(preds.cpu().numpy())
+        all_test_labels.extend(labels.cpu().numpy())
+
+print("Test classification report:")
+print(classification_report(all_test_labels, all_test_preds, target_names=train_labels))
+
+# Save the trained model
+torch.save(model.state_dict(), "/common/users/oi66/Wifi-Fingerprinting/Fingerprinter(1-4).pth")
