@@ -1,0 +1,313 @@
+Using device: cuda
+Epoch 1/20
+Training Loss: 1.3873
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 2/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 3/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 4/20
+Training Loss: 1.3873
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 5/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 6/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 7/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 8/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 9/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 10/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 11/20
+Training Loss: 1.3873
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 12/20
+Training Loss: 1.3873
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 13/20
+Training Loss: 1.3873
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 14/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 15/20
+Training Loss: 1.3873
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 16/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 17/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 18/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 19/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Epoch 20/20
+Training Loss: 1.3874
+Validation Loss: 1.3871
+Validation classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     10000
+X310_3123D58       0.00      0.00      0.00     10000
+X310_3123D52       0.25      1.00      0.40     10000
+X310_3123D79       0.00      0.00      0.00     10000
+
+    accuracy                           0.25     40000
+   macro avg       0.06      0.25      0.10     40000
+weighted avg       0.06      0.25      0.10     40000
+
+Test classification report:
+              precision    recall  f1-score   support
+
+X310_3123D89       0.00      0.00      0.00     50000
+X310_3123D58       0.00      0.00      0.00     50000
+X310_3123D52       0.25      1.00      0.40     50000
+X310_3123D79       0.00      0.00      0.00     50000
+
+    accuracy                           0.25    200000
+   macro avg       0.06      0.25      0.10    200000
+weighted avg       0.06      0.25      0.10    200000
+
