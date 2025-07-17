@@ -24,5 +24,6 @@ class CustomImageDataset(Dataset):
         power = np.mean(np.abs(iq) ** 2)
         if power > 0:
             iq = iq / np.sqrt(power)
-        x = np.stack([iq.real, iq.imag], axis=0).astype(np.float32)  # [2, window_size]
+        x = np.stack([iq.real, iq.imag], axis=0).astype(np.float32)  # [2, 128]
+        # Make sure this is the right shape for Conv1d
         return torch.from_numpy(x), torch.tensor(label, dtype=torch.long)

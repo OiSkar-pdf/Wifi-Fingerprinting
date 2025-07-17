@@ -2,9 +2,10 @@
 #SBATCH --job-name=wifi-train
 #SBATCH --output=logs/embeddings_output.out  
 #SBATCH --error=logs/embeddings_error.err
-#SBATCH --mem=120G                             
-
-
+#SBATCH --partition=unlimited
+#SBATCH --nodelist=ilab2
+#SBATCH --mem=120G
+#SBATCH --cpus-per-task=4
 # Go to project directory
 cd /common/users/oi66/Wifi-Fingerprinting
 
